@@ -14,7 +14,7 @@ jobs:
           echo "Hello World!"
       - name: Now it is
         run: |
-          echo $(date)
+          date
       - name: Directory content
         run: |
-          echo Total $(ls -1 | wc -l)
+          ls -l
