@@ -17,4 +17,4 @@ jobs:
           echo $(date)
       - name: Directory content
         run: |
-          echo $(ls -1 | wc -l)
+          echo Total $(ls -1 | wc -l)
