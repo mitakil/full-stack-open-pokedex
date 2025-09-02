@@ -16,4 +16,4 @@ Start by running `npm install` inside the project folder
 
 
 Here I write some text to test discord webhook
-more nonsense
+more nonsense and more
