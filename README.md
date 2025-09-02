@@ -16,4 +16,4 @@ Start by running `npm install` inside the project folder
 
 
 Here I write some text to test discord webhook
-more nonsense and more
+more nonsense and more, and more. Now DISORD_WEBHOOK is repository secret not a webhook
