@@ -38,12 +38,12 @@ jobs:
           wait-on: http://localhost:5000
           
       - name: Notification of success
-        if: ${{ success() }}
-        run: |
-          curl -H "Content-Type: application/json" \
-              -X POST \
-              -d '{"content": "This is notification of success"}' \
-              ${{ secrets.DISCORD_WEBHOOK }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.4.0
+        with:
+          args: 'Notification of success'
+        
 
       - name: Notification of failure
         if: ${{ failure() }}
