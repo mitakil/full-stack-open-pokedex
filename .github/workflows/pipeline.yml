@@ -36,6 +36,15 @@ jobs:
           command: npm run test:e2e:ci
           start: npm run start-prod
           wait-on: http://localhost:5000
+          
+      - name: Notification of success
+        if: ${{ success() }}
+        run: echo "All good, send message"
+
+      - name: Notification of failure
+        if: ${{ failure() }}
+        run: echo "we got failure"
+        
       - name: Trigger deployment
         if: github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip')
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
