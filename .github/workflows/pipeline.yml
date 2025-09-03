@@ -77,7 +77,13 @@ jobs:
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: '{"embeds":[{ "title":"Build succes","description":"No errors detected","color":65280}]}' 
+          DISCORD_EMBEDS: ${{ toJSON([
+            {
+              "title":"Notification of success",
+              "description":"No errors detected",
+              "color":65280
+            }
+          ]) }}
 
       - name: Notification of failure
         if: ${{ failure() }}
