@@ -78,16 +78,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: > 
-            {
-              "embeds": [
-                {
-                  "title": "Notification of success",
-                  "description": "No errors detected",
-                  "color": 65280
-                }
-              ]
-            }
+          args: {"embeds": [{"title": "Notification of success","description": "No errors detected","color": 65280}]}
 
       - name: Notification of failure
         if: ${{ failure() }}
