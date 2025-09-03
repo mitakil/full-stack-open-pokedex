@@ -77,8 +77,7 @@ jobs:
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: 'Version ${{ github.ref_name }} merged from PR'
+          DISCORD_EMBEDS: '{"embeds":[{ "title":"Build succes","description":"No errors detected","color":65280}]}' 
 
       - name: Notification of failure
         if: ${{ failure() }}
@@ -86,7 +85,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: 'Failure on deployment, commit ${{ github.sha }}'
+          args: 'Tag release failed, commit ${{ github.sha }}'
 
   discord_notification_failure_pr_cheks:
     needs: [pr_checks]
