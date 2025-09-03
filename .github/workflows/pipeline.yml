@@ -1,5 +1,3 @@
-name: Deployment pipeline
-
 on:
   push:
     branches:
@@ -11,13 +9,16 @@ on:
 jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-vesion: '20'
+          node-version: '20'
 
+  pr_checks:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Install dependencies
         run: npm install
 
@@ -36,24 +37,17 @@ jobs:
           command: npm run test:e2e:ci
           start: npm run start-prod
           wait-on: http://localhost:5000
-          
-      - name: Notification of success
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@0.3.2
-        with:
-          args: 'Notification of success'
-        
 
-      - name: Notification of failure
-        if: ${{ failure() }}
-        run: echo "we got failure"
-        
+  deploy_on_merge:
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Trigger deployment
         if: github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip')
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+
   tag_release:
-    needs: [simple_deployment_pipeline]
+    needs: [deploy_on_merge]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
     steps:
@@ -63,3 +57,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_PREFIX: v
+
+  discord_notification:
+    needs: [tag_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notification of success
+        if: ${{ success() }}
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: 'Version ${{ github.ref_name }} merged from PR'
+
+      - name: Notification of failure
+        if: ${{ failure() }}
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: 'Failure on deployment, commit ${{ github.sha }}'
