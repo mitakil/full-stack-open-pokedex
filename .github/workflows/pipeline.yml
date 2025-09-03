@@ -68,7 +68,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: 'Version ${{ github.ref_name }} of ${{ repository.full_name }} merged from PR'
+          args: 'Version ${{ github.ref_name }} merged from PR'
 
       - name: Notification of failure
         if: ${{ failure() }}
