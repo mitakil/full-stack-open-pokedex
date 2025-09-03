@@ -78,7 +78,14 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: 'Notification of success'
+          args: > 
+            ${{ toJSON([
+              {
+                "title": "Notification of success",
+                "description": "No errors detected",
+                "color": 65280
+              }
+            ]) }}
 
       - name: Notification of failure
         if: ${{ failure() }}
