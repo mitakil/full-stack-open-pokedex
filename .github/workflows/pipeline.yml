@@ -93,14 +93,6 @@ jobs:
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
-      - name: Notification of success
-        if: ${{ success() }}
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: 'Version ${{ github.ref_name }} merged from PR'
-
       - name: Notification of failure
         if: ${{ failure() }}
         uses: Ilshidur/action-discord@master
@@ -114,14 +106,6 @@ jobs:
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
-      - name: Notification of success
-        if: ${{ success() }}
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: 'Version ${{ github.ref_name }} merged from PR'
-
       - name: Notification of failure
         if: ${{ failure() }}
         uses: Ilshidur/action-discord@master
